@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: scoh_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: scoh_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: scoh_user
+      MYSQL_PASSWORD: scoh_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - scoh_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: scoh_backend
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/scoh_db
+      SPRING_DATASOURCE_USERNAME: scoh_user
+      SPRING_DATASOURCE_PASSWORD: scoh_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - scoh_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: scoh_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - scoh_network
+
+volumes:
+  mysql_data:
+
+networks:
+  scoh_network:
+    driver: bridge
