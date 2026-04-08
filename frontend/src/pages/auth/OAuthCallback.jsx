@@ -14,7 +14,7 @@ const OAuthCallback = () => {
 
     if (token) {
       login(token);
-      navigate("/notifications");
+      navigate("/dashboard");  // ✅ Fixed
     } else {
       console.error("No token in URL — redirecting to login");
       navigate("/login");
