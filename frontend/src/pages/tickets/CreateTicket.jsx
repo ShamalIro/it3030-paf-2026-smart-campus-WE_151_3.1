@@ -29,7 +29,15 @@ export default function CreateTicket() {
   const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === "contactPhone") {
+      const digitsOnly = value.replace(/\D/g, "").slice(0, 10);
+      setForm({ ...form, contactPhone: digitsOnly });
+      return;
+    }
+
+    setForm({ ...form, [name]: value });
   };
 
   const handleFileChange = (e) => {
@@ -55,6 +63,12 @@ export default function CreateTicket() {
         return;
       }
 
+      if (!/^\d{10}$/.test(form.contactPhone)) {
+        setError("Contact phone must be exactly 10 digits");
+        setLoading(false);
+        return;
+      }
+
       // Create ticket
       const ticket = await ticketService.createTicket(form);
 
@@ -71,6 +85,8 @@ export default function CreateTicket() {
       setLoading(false);
     }
   };
+
+  const isPhoneValid = /^\d{10}$/.test(form.contactPhone);
 
   const priorityColor = (p) => {
     if (p === "HIGH") return { bg: "#FEE2E2", color: "#DC2626" };
@@ -330,14 +346,22 @@ export default function CreateTicket() {
 
               {/* Contact Phone */}
               <div style={s.field}>
-                <label style={s.label}>Contact Phone</label>
+                <label style={s.label}>Contact Phone *</label>
                 <input
                   style={s.input}
                   name="contactPhone"
                   value={form.contactPhone}
                   onChange={handleChange}
-                  placeholder="e.g., 077-1234567"
+                  placeholder="e.g., 0771234567"
+                  inputMode="numeric"
+                  maxLength={10}
+                  required
                 />
+                {form.contactPhone.length > 0 && !isPhoneValid && (
+                  <span style={{ fontSize: "12px", color: "#DC2626" }}>
+                    Phone number must be exactly 10 digits.
+                  </span>
+                )}
               </div>
 
               {/* Contact Email */}
@@ -376,7 +400,7 @@ export default function CreateTicket() {
             <button type="button" style={s.cancelBtn} onClick={() => navigate("/tickets/my")}>
               Cancel
             </button>
-            <button type="submit" style={s.submitBtn} disabled={loading}>
+            <button type="submit" style={s.submitBtn} disabled={loading || !isPhoneValid}>
               {loading ? "Submitting..." : "Submit Ticket"}
             </button>
           </div>

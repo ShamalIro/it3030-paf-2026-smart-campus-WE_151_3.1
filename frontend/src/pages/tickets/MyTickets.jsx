@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import ticketService from "../../services/ticketService";
+import NotificationBell from "../../components/notifications/NotificationBell";
 
 export default function MyTickets() {
   const { user, logout } = useAuth();
@@ -149,6 +150,7 @@ export default function MyTickets() {
       <div style={s.main}>
         <header style={s.navbar}>
           <span style={{ fontSize: "18px", fontWeight: "700", color: "#1E293B" }}>My Tickets</span>
+          <NotificationBell />
         </header>
 
         <div style={s.content}>

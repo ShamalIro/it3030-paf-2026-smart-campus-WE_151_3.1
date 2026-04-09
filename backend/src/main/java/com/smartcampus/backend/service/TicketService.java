@@ -3,6 +3,7 @@ package com.smartcampus.backend.service;
 import com.smartcampus.backend.entity.Ticket;
 import com.smartcampus.backend.entity.TicketAttachment;
 import com.smartcampus.backend.entity.User;
+import com.smartcampus.backend.enums.NotificationType;
 import com.smartcampus.backend.enums.Role;
 import com.smartcampus.backend.enums.TicketStatus;
 import com.smartcampus.backend.repository.TicketAttachmentRepository;
@@ -28,6 +29,7 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final TicketAttachmentRepository attachmentRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     @Value("${ticket.upload.dir:uploads/tickets}")
     private String uploadDir;
@@ -71,6 +73,7 @@ public class TicketService {
         Ticket ticket = getTicketById(ticketId);
         User technician = userRepository.findById(technicianId)
                 .orElseThrow(() -> new RuntimeException("Technician not found"));
+        TicketStatus previousStatus = ticket.getStatus();
 
         if (technician.getRole() != Role.TECHNICIAN) {
             throw new RuntimeException("User is not a technician");
@@ -81,12 +84,15 @@ public class TicketService {
         if (ticket.getStatus() == TicketStatus.OPEN) {
             ticket.setStatus(TicketStatus.IN_PROGRESS);
         }
-        return ticketRepository.save(ticket);
+        Ticket savedTicket = ticketRepository.save(ticket);
+        notifyStatusChange(savedTicket, previousStatus, savedTicket.getStatus());
+        return savedTicket;
     }
 
     // ─── REJECT TICKET (Admin) ────────────────────────────────────────
     public Ticket rejectTicket(Long ticketId, String reason) {
         Ticket ticket = getTicketById(ticketId);
+        TicketStatus previousStatus = ticket.getStatus();
 
         if (ticket.getStatus() != TicketStatus.OPEN) {
             throw new RuntimeException("Only OPEN tickets can be rejected");
@@ -94,7 +100,9 @@ public class TicketService {
 
         ticket.setStatus(TicketStatus.REJECTED);
         ticket.setRejectionReason(reason);
-        return ticketRepository.save(ticket);
+        Ticket savedTicket = ticketRepository.save(ticket);
+        notifyStatusChange(savedTicket, previousStatus, savedTicket.getStatus());
+        return savedTicket;
     }
 
     // ─── UPDATE STATUS (Technician) ───────────────────────────────────
@@ -102,6 +110,7 @@ public class TicketService {
         Ticket ticket = getTicketById(ticketId);
         User technician = userRepository.findByEmail(techEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        TicketStatus previousStatus = ticket.getStatus();
 
         // Verify technician is assigned to this ticket
         if (ticket.getAssignedTechnician() == null ||
@@ -113,7 +122,9 @@ public class TicketService {
         validateStatusTransition(ticket.getStatus(), newStatus);
 
         ticket.setStatus(newStatus);
-        return ticketRepository.save(ticket);
+        Ticket savedTicket = ticketRepository.save(ticket);
+        notifyStatusChange(savedTicket, previousStatus, savedTicket.getStatus());
+        return savedTicket;
     }
 
     // ─── RESOLVE TICKET (Technician) ──────────────────────────────────
@@ -121,6 +132,7 @@ public class TicketService {
         Ticket ticket = getTicketById(ticketId);
         User technician = userRepository.findByEmail(techEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        TicketStatus previousStatus = ticket.getStatus();
 
         // Verify technician is assigned to this ticket
         if (ticket.getAssignedTechnician() == null ||
@@ -134,7 +146,9 @@ public class TicketService {
 
         ticket.setStatus(TicketStatus.RESOLVED);
         ticket.setResolutionNotes(resolutionNotes);
-        return ticketRepository.save(ticket);
+        Ticket savedTicket = ticketRepository.save(ticket);
+        notifyStatusChange(savedTicket, previousStatus, savedTicket.getStatus());
+        return savedTicket;
     }
 
     // ─── UPLOAD ATTACHMENTS ───────────────────────────────────────────
@@ -205,5 +219,24 @@ public class TicketService {
             throw new RuntimeException(
                     "Invalid status transition: " + current + " → " + next);
         }
+    }
+
+    private void notifyStatusChange(Ticket ticket,
+                                    TicketStatus previousStatus,
+                                    TicketStatus currentStatus) {
+        if (ticket.getCreator() == null || previousStatus == currentStatus) {
+            return;
+        }
+
+        String message = String.format(
+                "Ticket #%d status changed from %s to %s",
+                ticket.getId(),
+                previousStatus.name().replace("_", " "),
+                currentStatus.name().replace("_", " "));
+
+        notificationService.createNotification(
+                ticket.getCreator(),
+                NotificationType.TICKET_STATUS_CHANGED,
+                message);
     }
 }
