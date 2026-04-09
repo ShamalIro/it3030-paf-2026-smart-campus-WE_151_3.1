@@ -9,6 +9,13 @@ import UserRoleManagementPage from "../pages/admin/UserRoleManagementPage";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 
+// Ticket pages
+import CreateTicket from "../pages/tickets/CreateTicket";
+import MyTickets from "../pages/tickets/MyTickets";
+import TicketDetails from "../pages/tickets/TicketDetails";
+import AdminTickets from "../pages/tickets/AdminTickets";
+import TechnicianDashboard from "../pages/tickets/TechnicianDashboard";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -40,6 +47,43 @@ const AppRoutes = () => {
       <Route path="/admin/users" element={
         <ProtectedRoute allowedRoles={["ADMIN"]}>
           <UserRoleManagementPage />
+        </ProtectedRoute>
+      } />
+
+      {/* ─── TICKET ROUTES ─────────────────────────────────────── */}
+
+      {/* User: Create ticket */}
+      <Route path="/tickets/create" element={
+        <ProtectedRoute allowedRoles={["USER", "ADMIN", "TECHNICIAN"]}>
+          <CreateTicket />
+        </ProtectedRoute>
+      } />
+
+      {/* User: My tickets list */}
+      <Route path="/tickets/my" element={
+        <ProtectedRoute allowedRoles={["USER", "ADMIN", "TECHNICIAN"]}>
+          <MyTickets />
+        </ProtectedRoute>
+      } />
+
+      {/* Everyone: Ticket details */}
+      <Route path="/tickets/:id" element={
+        <ProtectedRoute allowedRoles={["USER", "ADMIN", "TECHNICIAN"]}>
+          <TicketDetails />
+        </ProtectedRoute>
+      } />
+
+      {/* Admin: Manage all tickets */}
+      <Route path="/admin/tickets" element={
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
+          <AdminTickets />
+        </ProtectedRoute>
+      } />
+
+      {/* Technician: Assigned tickets dashboard */}
+      <Route path="/technician/dashboard" element={
+        <ProtectedRoute allowedRoles={["TECHNICIAN"]}>
+          <TechnicianDashboard />
         </ProtectedRoute>
       } />
 
