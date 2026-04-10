@@ -16,7 +16,6 @@ export default function AdminDashboard() {
   const [deletingId, setDeletingId] = useState(null);
   const [successMsg, setSuccessMsg] = useState("");
 
-  // ─── Fetch all users ───────────────────────────────────────────
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -33,7 +32,6 @@ export default function AdminDashboard() {
     fetchUsers();
   }, []);
 
-  // ─── Change Role ───────────────────────────────────────────────
   const handleRoleChange = async (id, newRole) => {
     setUpdatingId(id);
     try {
@@ -49,7 +47,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // ─── Delete User ───────────────────────────────────────────────
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     setDeletingId(id);
@@ -69,20 +66,17 @@ export default function AdminDashboard() {
     setTimeout(() => setSuccessMsg(""), 3000);
   };
 
-  // ─── Derived Stats ─────────────────────────────────────────────
   const totalUsers = users.length;
   const adminCount = users.filter((u) => u.role === "ADMIN").length;
   const techCount = users.filter((u) => u.role === "TECHNICIAN").length;
   const userCount = users.filter((u) => u.role === "USER").length;
 
-  // ─── Filtered users ────────────────────────────────────────────
   const filtered = users.filter(
     (u) =>
       u.name?.toLowerCase().includes(search.toLowerCase()) ||
       u.email?.toLowerCase().includes(search.toLowerCase())
   );
 
-  // ─── Role badge style ──────────────────────────────────────────
   const roleBadge = (role) => {
     const map = {
       ADMIN: { bg: "#FEE2E2", color: "#DC2626" },
@@ -100,13 +94,11 @@ export default function AdminDashboard() {
     };
   };
 
-  // ─── Initials avatar ───────────────────────────────────────────
   const getInitials = (name) => {
     if (!name) return "?";
     return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
   };
 
-  // ─── Styles ────────────────────────────────────────────────────
   const s = {
     wrapper: {
       display: "flex",
@@ -114,7 +106,6 @@ export default function AdminDashboard() {
       fontFamily: "DM Sans, Segoe UI, sans-serif",
       background: "#F0F4FF",
     },
-    // Sidebar
     sidebar: {
       width: "240px",
       minHeight: "100vh",
@@ -122,7 +113,6 @@ export default function AdminDashboard() {
       borderRight: "1px solid #E2E8F0",
       display: "flex",
       flexDirection: "column",
-      padding: "0",
       position: "fixed",
       top: 0,
       left: 0,
@@ -176,15 +166,6 @@ export default function AdminDashboard() {
       textAlign: "left",
       transition: "all 0.15s",
     }),
-    navBadge: {
-      marginLeft: "auto",
-      background: "#EF4444",
-      color: "#fff",
-      borderRadius: "10px",
-      fontSize: "11px",
-      fontWeight: "700",
-      padding: "1px 7px",
-    },
     sidebarFooter: {
       padding: "16px",
       borderTop: "1px solid #E2E8F0",
@@ -230,7 +211,6 @@ export default function AdminDashboard() {
       padding: "4px",
       borderRadius: "6px",
     },
-    // Main
     main: {
       marginLeft: "240px",
       flex: 1,
@@ -275,28 +255,13 @@ export default function AdminDashboard() {
     content: {
       padding: "32px",
     },
-    pageHeader: {
-      marginBottom: "28px",
-    },
-    pageTitle: {
-      fontSize: "24px",
-      fontWeight: "700",
-      color: "#1E293B",
-      margin: 0,
-    },
-    pageSubtitle: {
-      fontSize: "14px",
-      color: "#64748B",
-      marginTop: "4px",
-    },
-    // Stat cards
     statsGrid: {
       display: "grid",
       gridTemplateColumns: "repeat(4, 1fr)",
       gap: "20px",
       marginBottom: "28px",
     },
-    statCard: (accent) => ({
+    statCard: () => ({
       background: "#fff",
       borderRadius: "16px",
       border: "1px solid #E2E8F0",
@@ -327,7 +292,6 @@ export default function AdminDashboard() {
       color: "#1E293B",
       lineHeight: 1.1,
     },
-    // Table card
     tableCard: {
       background: "#fff",
       borderRadius: "20px",
@@ -425,7 +389,6 @@ export default function AdminDashboard() {
       color: "#94A3B8",
       fontSize: "15px",
     },
-    // Alerts
     alert: (type) => ({
       padding: "12px 20px",
       borderRadius: "10px",
@@ -438,9 +401,9 @@ export default function AdminDashboard() {
     }),
   };
 
-  // ─── Render ────────────────────────────────────────────────────
   return (
     <div style={s.wrapper}>
+
       {/* ── Sidebar ── */}
       <aside style={s.sidebar}>
         <div style={s.logo}>
@@ -449,9 +412,32 @@ export default function AdminDashboard() {
         </div>
 
         <nav style={s.nav}>
-          <button style={s.navItem(true)}>
+
+          {/* Dashboard */}
+          <button
+            style={s.navItem(true)}
+            onClick={() => navigate("/dashboard")}
+          >
             🏠 <span>Dashboard</span>
           </button>
+
+          {/* ✅ Facilities */}
+          <button
+            style={s.navItem(false)}
+            onClick={() => navigate("/facilities")}
+          >
+            🏛️ <span>Facilities</span>
+          </button>
+
+          {/* ✅ Manage Facilities */}
+          <button
+            style={s.navItem(false)}
+            onClick={() => navigate("/admin/facilities")}
+          >
+            ⚙️ <span>Manage Facilities</span>
+          </button>
+
+          {/* Notifications */}
           <button
             style={s.navItem(false)}
             onClick={() => navigate("/admin/tickets")}
@@ -464,12 +450,15 @@ export default function AdminDashboard() {
           >
             🔔 <span>Notifications</span>
           </button>
+
+          {/* Users Admin */}
           <button
             style={s.navItem(false)}
             onClick={() => navigate("/admin/users")}
           >
             👥 <span>Users (Admin)</span>
           </button>
+
         </nav>
 
         <div style={s.sidebarFooter}>
@@ -478,11 +467,7 @@ export default function AdminDashboard() {
             <div style={s.footerName}>{user?.name || "Admin"}</div>
             <div style={s.footerRole}>{user?.role}</div>
           </div>
-          <button
-            style={s.logoutBtn}
-            onClick={logout}
-            title="Logout"
-          >
+          <button style={s.logoutBtn} onClick={logout} title="Logout">
             ↪
           </button>
         </div>
@@ -490,6 +475,7 @@ export default function AdminDashboard() {
 
       {/* ── Main ── */}
       <div style={s.main}>
+
         {/* Navbar */}
         <header style={s.navbar}>
           <span style={s.navbarTitle}>Admin Dashboard</span>
@@ -509,10 +495,13 @@ export default function AdminDashboard() {
 
         {/* Content */}
         <div style={s.content}>
+
           {/* Page Header */}
-          <div style={s.pageHeader}>
-            <h1 style={s.pageTitle}>Dashboard Overview</h1>
-            <p style={s.pageSubtitle}>
+          <div style={{ marginBottom: "28px" }}>
+            <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#1E293B", margin: 0 }}>
+              Dashboard Overview
+            </h1>
+            <p style={{ fontSize: "14px", color: "#64748B", marginTop: "4px" }}>
               Welcome back, {user?.name}. Manage users and roles here.
             </p>
           </div>
@@ -579,7 +568,6 @@ export default function AdminDashboard() {
                 <tbody>
                   {filtered.map((u) => (
                     <tr key={u.id}>
-                      {/* User cell */}
                       <td style={s.td}>
                         <div style={s.userCell}>
                           <div style={s.tableAvatar}>{getInitials(u.name)}</div>
@@ -589,13 +577,9 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                       </td>
-
-                      {/* Role badge */}
                       <td style={s.td}>
                         <span style={roleBadge(u.role)}>{u.role}</span>
                       </td>
-
-                      {/* Change role dropdown */}
                       <td style={s.td}>
                         <select
                           style={s.roleSelect}
@@ -608,8 +592,6 @@ export default function AdminDashboard() {
                           <option value="TECHNICIAN">TECHNICIAN</option>
                         </select>
                       </td>
-
-                      {/* Delete */}
                       <td style={s.td}>
                         <button
                           style={{
@@ -630,6 +612,7 @@ export default function AdminDashboard() {
               </table>
             )}
           </div>
+
         </div>
       </div>
     </div>
