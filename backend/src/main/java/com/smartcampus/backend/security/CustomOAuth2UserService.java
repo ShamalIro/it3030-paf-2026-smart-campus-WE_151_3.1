@@ -30,7 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .name(name)
                     .profilePicture(picture)
                     .role(Role.USER)
-                    .userType(UserType.STUDENT)
+                    .userType(UserType.GOOGLE) // ✅ Fixed
                     .build();
             return userRepository.save(newUser);
         });
