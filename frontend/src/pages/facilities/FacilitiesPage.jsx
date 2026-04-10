@@ -43,7 +43,8 @@ export default function FacilitiesPage() {
   });
 
   const filtered = facilities.filter(f => {
-    const matchSearch = f.name?.toLowerCase().includes(search.toLowerCase()) ||
+    const matchSearch =
+      f.name?.toLowerCase().includes(search.toLowerCase()) ||
       f.location?.toLowerCase().includes(search.toLowerCase());
     const matchType = filterType ? f.type === filterType : true;
     return matchSearch && matchType;
@@ -60,17 +61,25 @@ export default function FacilitiesPage() {
         </div>
 
         <nav style={{ flex: 1, padding: "16px 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
-          <button onClick={() => navigate("/dashboard")} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
+          <button
+            onClick={() => navigate("/dashboard")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
             🏠 Dashboard
           </button>
-          <button onClick={() => navigate("/facilities")} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "600", color: "#1D4ED8", background: "#EFF6FF", border: "none", width: "100%", textAlign: "left" }}>
+          <button
+            onClick={() => navigate("/facilities")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "600", color: "#1D4ED8", background: "#EFF6FF", border: "none", width: "100%", textAlign: "left" }}>
             🏛️ Facilities
           </button>
-          <button onClick={() => navigate("/notifications")} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
+          <button
+            onClick={() => navigate("/notifications")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
             🔔 Notifications
           </button>
           {user?.role === "ADMIN" && (
-            <button onClick={() => navigate("/admin/facilities")} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
+            <button
+              onClick={() => navigate("/admin/facilities")}
+              style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
               ⚙️ Manage Facilities
             </button>
           )}
@@ -90,6 +99,7 @@ export default function FacilitiesPage() {
 
       {/* Main */}
       <div style={{ marginLeft: "240px", flex: 1 }}>
+
         {/* Navbar */}
         <header style={{ background: "#fff", borderBottom: "1px solid #E2E8F0", padding: "0 32px", height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50 }}>
           <span style={{ fontSize: "18px", fontWeight: "700", color: "#1E293B" }}>Facilities & Assets</span>
@@ -119,8 +129,7 @@ export default function FacilitiesPage() {
             <select
               value={filterType}
               onChange={e => setFilterType(e.target.value)}
-              style={{ border: "1px solid #E2E8F0", borderRadius: "10px", padding: "8px 16px", fontSize: "14px", color: "#1E293B", background: "#fff", cursor: "pointer", outline: "none" }}
-            >
+              style={{ border: "1px solid #E2E8F0", borderRadius: "10px", padding: "8px 16px", fontSize: "14px", color: "#1E293B", background: "#fff", cursor: "pointer", outline: "none" }}>
               <option value="">All Types</option>
               <option value="LECTURE_HALL">Lecture Hall</option>
               <option value="LAB">Lab</option>
@@ -156,16 +165,49 @@ export default function FacilitiesPage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
               {filtered.map(f => (
                 <div key={f.id} style={{ background: "#fff", borderRadius: "20px", border: "1px solid #E2E8F0", padding: "24px", display: "flex", flexDirection: "column", gap: "12px" }}>
+
+                  {/* Type + Status badges */}
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <span style={typeBadge()}>{f.type?.replace("_", " ")}</span>
+                    <span style={typeBadge()}>{f.type?.replace(/_/g, " ")}</span>
                     <span style={statusBadge(f.status)}>{f.status}</span>
                   </div>
+
+                  {/* Name */}
                   <div style={{ fontSize: "18px", fontWeight: "700", color: "#1E293B" }}>{f.name}</div>
+
+                  {/* Details */}
                   <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     <div style={{ fontSize: "13px", color: "#64748B" }}>📍 {f.location}</div>
                     <div style={{ fontSize: "13px", color: "#64748B" }}>👥 Capacity: {f.capacity}</div>
                     <div style={{ fontSize: "13px", color: "#64748B" }}>🕐 {f.availabilityWindows}</div>
                   </div>
+
+                  {/* ✅ Book Now Button */}
+                  <div style={{ marginTop: "8px", paddingTop: "12px", borderTop: "1px solid #E2E8F0" }}>
+                    <button
+                      onClick={() => {
+                        if (f.status === "ACTIVE") {
+                          navigate(`/bookings/new?facilityId=${f.id}&facilityName=${encodeURIComponent(f.name)}`);
+                        }
+                      }}
+                      disabled={f.status !== "ACTIVE"}
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        background: f.status === "ACTIVE"
+                          ? "linear-gradient(135deg, #1D4ED8, #3B82F6)"
+                          : "#E2E8F0",
+                        color: f.status === "ACTIVE" ? "#fff" : "#94A3B8",
+                        border: "none",
+                        borderRadius: "10px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        cursor: f.status === "ACTIVE" ? "pointer" : "not-allowed",
+                      }}>
+                      {f.status === "ACTIVE" ? "📅 Book Now" : "🔧 Out of Service"}
+                    </button>
+                  </div>
+
                 </div>
               ))}
             </div>
