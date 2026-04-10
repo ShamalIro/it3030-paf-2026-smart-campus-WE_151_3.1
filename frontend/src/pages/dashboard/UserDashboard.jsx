@@ -11,6 +11,7 @@ export default function UserDashboard() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
+    // ✅ Fixed paths
     axiosInstance.get("/notifications/unread/count")
       .then(res => setUnreadCount(res.data.count))
       .catch(() => {});
@@ -25,52 +26,50 @@ export default function UserDashboard() {
     return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
   };
 
-  const sideBtn = (label, icon, path, active) => ({
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    padding: "10px 12px",
-    borderRadius: "10px",
-    cursor: "pointer",
-    fontSize: "14px",
-    fontWeight: active ? "600" : "500",
-    color: active ? "#1D4ED8" : "#64748B",
-    background: active ? "#EFF6FF" : "transparent",
-    border: "none",
-    width: "100%",
-    textAlign: "left",
-    fontFamily: "DM Sans, Segoe UI, sans-serif",
-  });
-
   return (
     <div style={{ display: "flex", minHeight: "100vh", fontFamily: "DM Sans, Segoe UI, sans-serif", background: "#F0F4FF" }}>
-      
+
       {/* Sidebar */}
       <aside style={{ width: "240px", background: "#fff", borderRight: "1px solid #E2E8F0", display: "flex", flexDirection: "column", position: "fixed", top: 0, left: 0, bottom: 0 }}>
+        
+        {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "24px 20px", borderBottom: "1px solid #E2E8F0" }}>
           <div style={{ width: "36px", height: "36px", background: "linear-gradient(135deg, #1D4ED8, #3B82F6)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: "700" }}>S</div>
           <span style={{ fontWeight: "700", fontSize: "16px", color: "#1E293B" }}>SCOH</span>
         </div>
 
+        {/* Nav */}
         <nav style={{ flex: 1, padding: "16px 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
-          <button onClick={() => navigate("/dashboard")} style={sideBtn("Dashboard", "🏠", "/dashboard", true)}>
+          
+          {/* Dashboard */}
+          <button
+            onClick={() => navigate("/dashboard")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "600", color: "#1D4ED8", background: "#EFF6FF", border: "none", width: "100%", textAlign: "left" }}>
             🏠 Dashboard
           </button>
-          <button onClick={() => navigate("/bookings/my")} style={sideBtn("My Bookings", "📅", "/bookings/my", false)}>
-            📅 My Bookings
+
+          {/* ✅ Facilities */}
+          <button
+            onClick={() => navigate("/facilities")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
+            🏛️ Facilities
           </button>
-          <button onClick={() => navigate("/bookings/create")} style={sideBtn("Create Booking", "➕", "/bookings/create", false)}>
-            ➕ Create Booking
-          </button>
-          <button onClick={() => navigate("/facilities")} style={sideBtn("Facilities", "🏢", "/facilities", false)}>
-            🏢 Facilities
-          </button>
-          <button onClick={() => navigate("/notifications")} style={sideBtn("Notifications", "🔔", "/notifications", false)}>
+
+          {/* Notifications */}
+          <button
+            onClick={() => navigate("/notifications")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
             🔔 Notifications
-            {unreadCount > 0 && <span style={{ marginLeft: "auto", background: "#EF4444", color: "#fff", borderRadius: "10px", fontSize: "11px", fontWeight: "700", padding: "1px 7px" }}>{unreadCount}</span>}
+            {unreadCount > 0 && (
+              <span style={{ marginLeft: "auto", background: "#EF4444", color: "#fff", borderRadius: "10px", fontSize: "11px", fontWeight: "700", padding: "1px 7px" }}>
+                {unreadCount}
+              </span>
+            )}
           </button>
+
         </nav>
 
+        {/* Footer */}
         <div style={{ padding: "16px", borderTop: "1px solid #E2E8F0", display: "flex", alignItems: "center", gap: "10px" }}>
           <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "linear-gradient(135deg, #1D4ED8, #3B82F6)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: "700", fontSize: "13px" }}>
             {getInitials(user?.name)}
@@ -85,18 +84,30 @@ export default function UserDashboard() {
 
       {/* Main */}
       <div style={{ marginLeft: "240px", flex: 1 }}>
+
+        {/* Navbar */}
         <header style={{ background: "#fff", borderBottom: "1px solid #E2E8F0", padding: "0 32px", height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50 }}>
           <span style={{ fontSize: "18px", fontWeight: "700", color: "#1E293B" }}>My Dashboard</span>
           <NotificationBell />
         </header>
 
+        {/* Content */}
         <div style={{ padding: "32px" }}>
+
+          {/* Page Header */}
           <div style={{ marginBottom: "28px" }}>
-            <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#1E293B", margin: 0 }}>Welcome back, {user?.name} 👋</h1>
-            <p style={{ fontSize: "14px", color: "#64748B", marginTop: "4px" }}>Here's your activity summary.</p>
+            <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#1E293B", margin: 0 }}>
+              Welcome back, {user?.name} 👋
+            </h1>
+            <p style={{ fontSize: "14px", color: "#64748B", marginTop: "4px" }}>
+              Here's your activity summary.
+            </p>
           </div>
 
+          {/* Stat Cards */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginBottom: "28px" }}>
+
+            {/* Unread Notifications */}
             <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px" }}>
               <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#FEE2E2", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>🔔</div>
               <div>
@@ -104,6 +115,8 @@ export default function UserDashboard() {
                 <div style={{ fontSize: "28px", fontWeight: "700", color: "#1E293B" }}>{unreadCount}</div>
               </div>
             </div>
+
+            {/* Total Notifications */}
             <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px" }}>
               <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#D1FAE5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>✅</div>
               <div>
@@ -111,6 +124,8 @@ export default function UserDashboard() {
                 <div style={{ fontSize: "28px", fontWeight: "700", color: "#1E293B" }}>{notifications.length}</div>
               </div>
             </div>
+
+            {/* My Role */}
             <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px" }}>
               <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#DBEAFE", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>👤</div>
               <div>
@@ -118,15 +133,46 @@ export default function UserDashboard() {
                 <div style={{ fontSize: "20px", fontWeight: "700", color: "#1D4ED8" }}>{user?.role}</div>
               </div>
             </div>
+
           </div>
 
+          {/* Quick Links */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px", marginBottom: "28px" }}>
+            <button
+              onClick={() => navigate("/facilities")}
+              style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px", cursor: "pointer", textAlign: "left" }}>
+              <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>🏛️</div>
+              <div>
+                <div style={{ fontSize: "15px", fontWeight: "700", color: "#1E293B" }}>Browse Facilities</div>
+                <div style={{ fontSize: "13px", color: "#64748B" }}>View available rooms and equipment</div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => navigate("/notifications")}
+              style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px", cursor: "pointer", textAlign: "left" }}>
+              <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#FEF9C3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>🔔</div>
+              <div>
+                <div style={{ fontSize: "15px", fontWeight: "700", color: "#1E293B" }}>All Notifications</div>
+                <div style={{ fontSize: "13px", color: "#64748B" }}>View and manage your alerts</div>
+              </div>
+            </button>
+          </div>
+
+          {/* Recent Notifications */}
           <div style={{ background: "#fff", borderRadius: "20px", border: "1px solid #E2E8F0", overflow: "hidden" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px", borderBottom: "1px solid #E2E8F0" }}>
               <span style={{ fontSize: "16px", fontWeight: "700", color: "#1E293B" }}>Recent Notifications</span>
-              <button onClick={() => navigate("/notifications")} style={{ background: "none", border: "none", color: "#1D4ED8", fontSize: "13px", fontWeight: "600", cursor: "pointer" }}>View all →</button>
+              <button
+                onClick={() => navigate("/notifications")}
+                style={{ background: "none", border: "none", color: "#1D4ED8", fontSize: "13px", fontWeight: "600", cursor: "pointer" }}>
+                View all →
+              </button>
             </div>
             {notifications.length === 0 ? (
-              <div style={{ padding: "40px", textAlign: "center", color: "#94A3B8" }}>No notifications yet.</div>
+              <div style={{ padding: "40px", textAlign: "center", color: "#94A3B8" }}>
+                No notifications yet.
+              </div>
             ) : (
               notifications.map((n) => (
                 <div key={n.id} style={{ padding: "16px 24px", borderBottom: "1px solid #F1F5F9", display: "flex", alignItems: "center", gap: "12px" }}>
@@ -139,6 +185,7 @@ export default function UserDashboard() {
               ))
             )}
           </div>
+
         </div>
       </div>
     </div>
