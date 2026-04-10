@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const BACKEND_URL = "http://localhost:8080";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
@@ -24,7 +26,7 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (!res.ok) { setError(data.message || "Invalid credentials."); return; }
-      localStorage.setItem("token", data.token);
+      await login(data.token);
       navigate("/dashboard");
     } catch {
       setError("Unable to connect. Please try again.");

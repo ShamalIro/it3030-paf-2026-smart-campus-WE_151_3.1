@@ -11,6 +11,8 @@ import DashboardPage from "../pages/dashboard/DashboardPage";
 import CreateBookingPage from "../pages/bookings/CreateBookingPage";
 import MyBookingsPage from "../pages/bookings/MyBookingsPage";
 import AdminBookingsPage from "../pages/bookings/AdminBookingsPage";
+import FacilitiesPage from "../pages/facilities/FacilitiesPage";
+import ManageFacilitiesPage from "../pages/facilities/ManageFacilitiesPage";
 
 const AppRoutes = () => {
   return (
@@ -20,14 +22,12 @@ const AppRoutes = () => {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/auth/callback" element={<OAuthCallback />} />
 
-      {/* Dashboard — role-based router */}
       <Route path="/dashboard" element={
         <ProtectedRoute allowedRoles={["USER", "ADMIN", "TECHNICIAN"]}>
           <DashboardPage />
         </ProtectedRoute>
       } />
 
-      {/* Admin only */}
       <Route path="/admin/dashboard" element={
         <ProtectedRoute allowedRoles={["ADMIN"]}>
           <AdminDashboard />
@@ -46,7 +46,18 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
 
-      {/* Booking Routes */}
+      <Route path="/facilities" element={
+        <ProtectedRoute allowedRoles={["USER", "ADMIN", "TECHNICIAN"]}>
+          <FacilitiesPage />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/admin/facilities" element={
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
+          <ManageFacilitiesPage />
+        </ProtectedRoute>
+      } />
+
       <Route path="/bookings/create" element={
         <ProtectedRoute allowedRoles={["USER", "ADMIN", "TECHNICIAN"]}>
           <CreateBookingPage />

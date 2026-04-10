@@ -20,7 +20,6 @@ public class AuthController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
-    // TEMPORARY - Generate test token (REMOVE BEFORE SUBMISSION)
     @GetMapping("/auth/test-token")
     public ResponseEntity<Map<String, String>> getTestToken(
             @RequestParam String email) {
@@ -29,7 +28,6 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("token", token));
     }
 
-    // GET current logged in user
     @GetMapping("/auth/me")
     public ResponseEntity<User> getCurrentUser(
             @AuthenticationPrincipal String email) {
@@ -37,14 +35,12 @@ public class AuthController {
         return ResponseEntity.ok(user);
     }
 
-    // GET all users - Admin only
     @GetMapping("/admin/users")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // PATCH update user role - Admin only
     @PatchMapping("/admin/users/{id}/role")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> updateUserRole(
@@ -55,7 +51,6 @@ public class AuthController {
         return ResponseEntity.ok(updated);
     }
 
-    // DELETE user - Admin only
     @DeleteMapping("/admin/users/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {

@@ -12,15 +12,25 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       axiosInstance.get("/auth/me")
         .then(res => setUser(res.data))
-        .catch(() => localStorage.removeItem("token"))
+        .catch(() => {
+          localStorage.removeItem("token");
+          setUser(null);
+        })
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
   }, []);
 
-  const login = (token) => {
+  const login = async (token) => {
     localStorage.setItem("token", token);
+    try {
+      const res = await axiosInstance.get("/auth/me");
+      setUser(res.data);
+    } catch {
+      localStorage.removeItem("token");
+      setUser(null);
+    }
   };
 
   const logout = () => {
