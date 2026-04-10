@@ -8,6 +8,8 @@ import NotificationsPage from "../pages/notifications/NotificationsPage";
 import UserRoleManagementPage from "../pages/admin/UserRoleManagementPage";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import DashboardPage from "../pages/dashboard/DashboardPage";
+import FacilitiesPage from "../pages/facilities/FacilitiesPage";
+import ManageFacilitiesPage from "../pages/facilities/ManageFacilitiesPage";
 
 // Ticket pages
 import CreateTicket from "../pages/tickets/CreateTicket";
@@ -49,6 +51,17 @@ const AppRoutes = () => {
           <UserRoleManagementPage />
         </ProtectedRoute>
       } />
+      <Route path="/facilities" element={
+  <ProtectedRoute allowedRoles={["USER", "ADMIN", "TECHNICIAN"]}>
+    <FacilitiesPage />
+  </ProtectedRoute>
+} />
+
+<Route path="/admin/facilities" element={
+  <ProtectedRoute allowedRoles={["ADMIN"]}>
+    <ManageFacilitiesPage />
+  </ProtectedRoute>
+} />
 
       {/* ─── TICKET ROUTES ─────────────────────────────────────── */}
 
@@ -89,6 +102,7 @@ const AppRoutes = () => {
 
       <Route path="*" element={<LandingPage />} />
     </Routes>
+    
   );
 };
 

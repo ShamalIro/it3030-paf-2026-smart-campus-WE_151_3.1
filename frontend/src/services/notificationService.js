@@ -8,6 +8,11 @@ const notificationService = {
         return response;
     },
 
+    getAll: async () => {
+        const response = await axiosInstance.get('/notifications');
+        return response.data;
+    },
+
     // Get unread notifications
     getUnreadNotifications: async () => {
         const response = await axiosInstance.get(
