@@ -6,5 +6,7 @@ public enum UserType {
     INSTRUCTOR,
     FINANCE,
     HR,
-    STAFF
+    STAFF,
+    EMAIL,    // ✅ for email/password signup
+    GOOGLE    // ✅ for Google OAuth login
 }

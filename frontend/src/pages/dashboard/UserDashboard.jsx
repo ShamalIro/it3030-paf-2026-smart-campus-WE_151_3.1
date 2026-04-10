@@ -11,11 +11,11 @@ export default function UserDashboard() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    axiosInstance.get("/notifications/my/unread-count")
-      .then(res => setUnreadCount(res.data))
+    axiosInstance.get("/notifications/unread/count")
+      .then(res => setUnreadCount(res.data.count))
       .catch(() => {});
 
-    axiosInstance.get("/notifications/my")
+    axiosInstance.get("/notifications")
       .then(res => setNotifications(res.data.slice(0, 5)))
       .catch(() => {});
   }, []);
