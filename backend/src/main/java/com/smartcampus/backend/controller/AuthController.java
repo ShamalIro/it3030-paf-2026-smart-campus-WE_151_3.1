@@ -2,11 +2,13 @@ package com.smartcampus.backend.controller;
 
 import com.smartcampus.backend.entity.User;
 import com.smartcampus.backend.enums.Role;
+import com.smartcampus.backend.security.JwtUtil;
 import com.smartcampus.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,45 @@ import java.util.Map;
 public class AuthController {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
-    // POST register new user
+    //  POST login
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
+        try {
+            String email = request.get("email");
+            String password = request.get("password");
+
+            if (email == null || password == null) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("message", "Email and password are required."));
+            }
+
+            // Find user
+            User user = userService.getUserByEmail(email);
+
+            // Check password
+            if (!passwordEncoder.matches(password, user.getPassword())) {
+                return ResponseEntity.status(401)
+                        .body(Map.of("message", "Invalid credentials."));
+            }
+
+            // Generate JWT
+            String token = jwtUtil.generateToken(
+                    user.getEmail(),
+                    user.getRole().name()
+            );
+
+            return ResponseEntity.ok(Map.of("token", token));
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(401)
+                    .body(Map.of("message", "Invalid credentials."));
+        }
+    }
+
+    // POST register
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
         try {
@@ -28,16 +67,16 @@ public class AuthController {
 
             if (name == null || email == null || password == null) {
                 return ResponseEntity.badRequest()
-                    .body(Map.of("message", "All fields are required."));
+                        .body(Map.of("message", "All fields are required."));
             }
 
-            User user = userService.registerUser(name, email, password);
+            userService.registerUser(name, email, password);
             return ResponseEntity.status(201)
-                .body(Map.of("message", "Account created successfully."));
+                    .body(Map.of("message", "Account created successfully."));
 
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest()
-                .body(Map.of("message", e.getMessage()));
+                    .body(Map.of("message", e.getMessage()));
         }
     }
 
