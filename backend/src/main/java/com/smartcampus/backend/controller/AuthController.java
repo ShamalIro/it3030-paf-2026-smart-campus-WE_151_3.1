@@ -18,6 +18,29 @@ public class AuthController {
 
     private final UserService userService;
 
+    // POST register new user
+    @PostMapping("/auth/register")
+    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
+        try {
+            String name = request.get("name");
+            String email = request.get("email");
+            String password = request.get("password");
+
+            if (name == null || email == null || password == null) {
+                return ResponseEntity.badRequest()
+                    .body(Map.of("message", "All fields are required."));
+            }
+
+            User user = userService.registerUser(name, email, password);
+            return ResponseEntity.status(201)
+                .body(Map.of("message", "Account created successfully."));
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("message", e.getMessage()));
+        }
+    }
+
     // GET current logged in user
     @GetMapping("/auth/me")
     public ResponseEntity<User> getCurrentUser(
