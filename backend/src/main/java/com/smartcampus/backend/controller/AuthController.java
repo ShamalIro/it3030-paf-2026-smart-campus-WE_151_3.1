@@ -2,6 +2,7 @@ package com.smartcampus.backend.controller;
 
 import com.smartcampus.backend.entity.User;
 import com.smartcampus.backend.enums.Role;
+import com.smartcampus.backend.security.JwtUtil;
 import com.smartcampus.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,16 @@ import java.util.Map;
 public class AuthController {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
+
+    // TEMPORARY - Generate test token (REMOVE BEFORE SUBMISSION)
+    @GetMapping("/auth/test-token")
+    public ResponseEntity<Map<String, String>> getTestToken(
+            @RequestParam String email) {
+        User user = userService.getUserByEmail(email);
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        return ResponseEntity.ok(Map.of("token", token));
+    }
 
     // GET current logged in user
     @GetMapping("/auth/me")
