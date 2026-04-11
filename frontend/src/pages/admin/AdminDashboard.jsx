@@ -186,10 +186,7 @@ export default function AdminDashboard() {
       fontSize: "13px",
       flexShrink: 0,
     },
-    footerInfo: {
-      flex: 1,
-      overflow: "hidden",
-    },
+    footerInfo: { flex: 1, overflow: "hidden" },
     footerName: {
       fontSize: "13px",
       fontWeight: "600",
@@ -198,10 +195,7 @@ export default function AdminDashboard() {
       overflow: "hidden",
       textOverflow: "ellipsis",
     },
-    footerRole: {
-      fontSize: "11px",
-      color: "#94A3B8",
-    },
+    footerRole: { fontSize: "11px", color: "#94A3B8" },
     logoutBtn: {
       background: "none",
       border: "none",
@@ -229,11 +223,7 @@ export default function AdminDashboard() {
       top: 0,
       zIndex: 50,
     },
-    navbarTitle: {
-      fontSize: "18px",
-      fontWeight: "700",
-      color: "#1E293B",
-    },
+    navbarTitle: { fontSize: "18px", fontWeight: "700", color: "#1E293B" },
     searchBar: {
       display: "flex",
       alignItems: "center",
@@ -252,9 +242,7 @@ export default function AdminDashboard() {
       color: "#1E293B",
       width: "100%",
     },
-    content: {
-      padding: "32px",
-    },
+    content: { padding: "32px" },
     statsGrid: {
       display: "grid",
       gridTemplateColumns: "repeat(4, 1fr)",
@@ -281,17 +269,8 @@ export default function AdminDashboard() {
       fontSize: "22px",
       flexShrink: 0,
     }),
-    statLabel: {
-      fontSize: "13px",
-      color: "#64748B",
-      fontWeight: "500",
-    },
-    statValue: {
-      fontSize: "28px",
-      fontWeight: "700",
-      color: "#1E293B",
-      lineHeight: 1.1,
-    },
+    statLabel: { fontSize: "13px", color: "#64748B", fontWeight: "500" },
+    statValue: { fontSize: "28px", fontWeight: "700", color: "#1E293B", lineHeight: 1.1 },
     tableCard: {
       background: "#fff",
       borderRadius: "20px",
@@ -305,19 +284,9 @@ export default function AdminDashboard() {
       padding: "20px 24px",
       borderBottom: "1px solid #E2E8F0",
     },
-    tableTitle: {
-      fontSize: "16px",
-      fontWeight: "700",
-      color: "#1E293B",
-    },
-    tableCount: {
-      fontSize: "13px",
-      color: "#64748B",
-    },
-    table: {
-      width: "100%",
-      borderCollapse: "collapse",
-    },
+    tableTitle: { fontSize: "16px", fontWeight: "700", color: "#1E293B" },
+    tableCount: { fontSize: "13px", color: "#64748B" },
+    table: { width: "100%", borderCollapse: "collapse" },
     th: {
       padding: "12px 24px",
       textAlign: "left",
@@ -336,11 +305,7 @@ export default function AdminDashboard() {
       color: "#1E293B",
       verticalAlign: "middle",
     },
-    userCell: {
-      display: "flex",
-      alignItems: "center",
-      gap: "12px",
-    },
+    userCell: { display: "flex", alignItems: "center", gap: "12px" },
     tableAvatar: {
       width: "36px",
       height: "36px",
@@ -354,14 +319,8 @@ export default function AdminDashboard() {
       fontSize: "12px",
       flexShrink: 0,
     },
-    userName: {
-      fontWeight: "600",
-      color: "#1E293B",
-    },
-    userEmail: {
-      fontSize: "12px",
-      color: "#94A3B8",
-    },
+    userName: { fontWeight: "600", color: "#1E293B" },
+    userEmail: { fontSize: "12px", color: "#94A3B8" },
     roleSelect: {
       border: "1px solid #E2E8F0",
       borderRadius: "8px",
@@ -404,7 +363,7 @@ export default function AdminDashboard() {
   return (
     <div style={s.wrapper}>
 
-      {/* ── Sidebar ── */}
+      {/* Sidebar */}
       <aside style={s.sidebar}>
         <div style={s.logo}>
           <div style={s.logoIcon}>S</div>
@@ -413,49 +372,32 @@ export default function AdminDashboard() {
 
         <nav style={s.nav}>
 
-          {/* Dashboard */}
-          <button
-            style={s.navItem(true)}
-            onClick={() => navigate("/dashboard")}
-          >
+          <button style={s.navItem(true)} onClick={() => navigate("/dashboard")}>
             🏠 <span>Dashboard</span>
           </button>
 
-          {/* ✅ Facilities */}
-          <button
-            style={s.navItem(false)}
-            onClick={() => navigate("/facilities")}
-          >
+          <button style={s.navItem(false)} onClick={() => navigate("/facilities")}>
             🏛️ <span>Facilities</span>
           </button>
 
-          {/* ✅ Manage Facilities */}
-          <button
-            style={s.navItem(false)}
-            onClick={() => navigate("/admin/facilities")}
-          >
+          <button style={s.navItem(false)} onClick={() => navigate("/admin/facilities")}>
             ⚙️ <span>Manage Facilities</span>
           </button>
 
-          {/* Notifications */}
-          <button
-            style={s.navItem(false)}
-            onClick={() => navigate("/admin/tickets")}
-          >
+          {/* ✅ Manage Bookings */}
+          <button style={s.navItem(false)} onClick={() => navigate("/admin/bookings")}>
+            📅 <span>Manage Bookings</span>
+          </button>
+
+          <button style={s.navItem(false)} onClick={() => navigate("/admin/tickets")}>
             🎫 <span>Manage Tickets</span>
           </button>
-          <button
-            style={s.navItem(false)}
-            onClick={() => navigate("/notifications")}
-          >
+
+          <button style={s.navItem(false)} onClick={() => navigate("/notifications")}>
             🔔 <span>Notifications</span>
           </button>
 
-          {/* Users Admin */}
-          <button
-            style={s.navItem(false)}
-            onClick={() => navigate("/admin/users")}
-          >
+          <button style={s.navItem(false)} onClick={() => navigate("/admin/users")}>
             👥 <span>Users (Admin)</span>
           </button>
 
@@ -467,16 +409,13 @@ export default function AdminDashboard() {
             <div style={s.footerName}>{user?.name || "Admin"}</div>
             <div style={s.footerRole}>{user?.role}</div>
           </div>
-          <button style={s.logoutBtn} onClick={logout} title="Logout">
-            ↪
-          </button>
+          <button style={s.logoutBtn} onClick={logout} title="Logout">↪</button>
         </div>
       </aside>
 
-      {/* ── Main ── */}
+      {/* Main */}
       <div style={s.main}>
 
-        {/* Navbar */}
         <header style={s.navbar}>
           <span style={s.navbarTitle}>Admin Dashboard</span>
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
@@ -493,10 +432,8 @@ export default function AdminDashboard() {
           </div>
         </header>
 
-        {/* Content */}
         <div style={s.content}>
 
-          {/* Page Header */}
           <div style={{ marginBottom: "28px" }}>
             <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#1E293B", margin: 0 }}>
               Dashboard Overview
@@ -506,11 +443,9 @@ export default function AdminDashboard() {
             </p>
           </div>
 
-          {/* Alerts */}
           {successMsg && <div style={s.alert("success")}>{successMsg}</div>}
           {error && <div style={s.alert("error")}>{error}</div>}
 
-          {/* Stat Cards */}
           <div style={s.statsGrid}>
             <div style={s.statCard()}>
               <div style={s.statIcon("#EFF6FF")}>👥</div>
@@ -542,13 +477,10 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Users Table */}
           <div style={s.tableCard}>
             <div style={s.tableHeader}>
               <span style={s.tableTitle}>User Management</span>
-              <span style={s.tableCount}>
-                {filtered.length} of {totalUsers} users
-              </span>
+              <span style={s.tableCount}>{filtered.length} of {totalUsers} users</span>
             </div>
 
             {loading ? (
