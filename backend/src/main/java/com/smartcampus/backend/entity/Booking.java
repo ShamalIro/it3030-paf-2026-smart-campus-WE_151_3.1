@@ -23,8 +23,14 @@ public class Booking {
     private Long facilityId;
     private String facilityName;
 
+    // ✅ Fixed column names to match DB
+    @Column(name = "booking_date")
     private LocalDate date;
+
+    @Column(name = "start_time")
     private LocalTime startTime;
+
+    @Column(name = "end_time")
     private LocalTime endTime;
 
     private String purpose;
