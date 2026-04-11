@@ -40,7 +40,26 @@ public class TicketService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         ticket.setCreator(creator);
         ticket.setStatus(TicketStatus.OPEN);
-        return ticketRepository.save(ticket);
+        Ticket saved = ticketRepository.save(ticket);
+
+        // ✅ Notify all ADMINS about new ticket
+        List<User> admins = userRepository.findByRole(Role.ADMIN);
+        
+        // Debug log
+        System.out.println("🔍 Found " + admins.size() + " admins");
+        admins.forEach(admin -> System.out.println("  - Admin: " + admin.getId() + " (" + admin.getEmail() + ")"));
+        
+        for (User admin : admins) {
+            notificationService.createNotification(
+                admin,
+                NotificationType.TICKET_STATUS_CHANGED,
+                "New ticket #" + saved.getId() +
+                " reported by " + creator.getName() +
+                " - Category: " + saved.getCategory()
+            );
+        }
+
+        return saved;
     }
 
     // ─── GET ALL TICKETS (Admin) ──────────────────────────────────────

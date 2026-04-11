@@ -113,4 +113,16 @@ public class AuthController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    // 🔍 DEBUG ENDPOINT - Check all admins in system
+    @GetMapping("/debug/admins")
+    public ResponseEntity<?> debugAdmins() {
+        List<User> admins = userService.getAllAdmins();
+        return ResponseEntity.ok(Map.of(
+            "adminCount", admins.size(),
+            "admins", admins.stream()
+                .map(a -> Map.of("id", a.getId(), "name", a.getName(), "email", a.getEmail(), "role", a.getRole()))
+                .toList()
+        ));
+    }
 }
