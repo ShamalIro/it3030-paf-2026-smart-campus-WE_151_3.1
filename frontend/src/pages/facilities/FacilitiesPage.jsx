@@ -61,24 +61,28 @@ export default function FacilitiesPage() {
         </div>
 
         <nav style={{ flex: 1, padding: "16px 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
-          <button
-            onClick={() => navigate("/dashboard")}
+          <button onClick={() => navigate("/dashboard")}
             style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
             🏠 Dashboard
           </button>
-          <button
-            onClick={() => navigate("/facilities")}
+          <button onClick={() => navigate("/facilities")}
             style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "600", color: "#1D4ED8", background: "#EFF6FF", border: "none", width: "100%", textAlign: "left" }}>
             🏛️ Facilities
           </button>
-          <button
-            onClick={() => navigate("/notifications")}
+
+          {/* ✅ My Bookings */}
+          <button onClick={() => navigate("/bookings")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
+            📅 My Bookings
+          </button>
+
+          <button onClick={() => navigate("/notifications")}
             style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
             🔔 Notifications
           </button>
+
           {user?.role === "ADMIN" && (
-            <button
-              onClick={() => navigate("/admin/facilities")}
+            <button onClick={() => navigate("/admin/facilities")}
               style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
               ⚙️ Manage Facilities
             </button>
@@ -125,7 +129,6 @@ export default function FacilitiesPage() {
               <p style={{ fontSize: "14px", color: "#64748B", marginTop: "4px" }}>Browse all available campus resources.</p>
             </div>
 
-            {/* Filter */}
             <select
               value={filterType}
               onChange={e => setFilterType(e.target.value)}
@@ -172,7 +175,7 @@ export default function FacilitiesPage() {
                     <span style={statusBadge(f.status)}>{f.status}</span>
                   </div>
 
-                  {/* Name */}
+                  {/* ✅ Name without "Name: " prefix */}
                   <div style={{ fontSize: "18px", fontWeight: "700", color: "#1E293B" }}>{f.name}</div>
 
                   {/* Details */}
@@ -182,7 +185,7 @@ export default function FacilitiesPage() {
                     <div style={{ fontSize: "13px", color: "#64748B" }}>🕐 {f.availabilityWindows}</div>
                   </div>
 
-                  {/* ✅ Book Now Button */}
+                  {/* Book Now Button */}
                   <div style={{ marginTop: "8px", paddingTop: "12px", borderTop: "1px solid #E2E8F0" }}>
                     <button
                       onClick={() => {
