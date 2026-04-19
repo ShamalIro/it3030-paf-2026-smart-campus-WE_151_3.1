@@ -36,7 +36,7 @@ public class User {
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private UserType userType;
 
     @Column(nullable = false, updatable = false)
