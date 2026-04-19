@@ -11,7 +11,6 @@ export default function UserDashboard() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // ✅ Fixed paths
     axiosInstance.get("/notifications/unread/count")
       .then(res => setUnreadCount(res.data.count))
       .catch(() => {});
@@ -31,7 +30,7 @@ export default function UserDashboard() {
 
       {/* Sidebar */}
       <aside style={{ width: "240px", background: "#fff", borderRight: "1px solid #E2E8F0", display: "flex", flexDirection: "column", position: "fixed", top: 0, left: 0, bottom: 0 }}>
-        
+
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "24px 20px", borderBottom: "1px solid #E2E8F0" }}>
           <div style={{ width: "36px", height: "36px", background: "linear-gradient(135deg, #1D4ED8, #3B82F6)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: "700" }}>S</div>
@@ -40,30 +39,34 @@ export default function UserDashboard() {
 
         {/* Nav */}
         <nav style={{ flex: 1, padding: "16px 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
-          
-          {/* Dashboard */}
-          <button
-            onClick={() => navigate("/dashboard")}
+
+          <button onClick={() => navigate("/dashboard")}
             style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "600", color: "#1D4ED8", background: "#EFF6FF", border: "none", width: "100%", textAlign: "left" }}>
             🏠 Dashboard
           </button>
-          <button onClick={() => navigate("/tickets/my")} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
-            🎫 My Tickets
-          </button>
-          <button onClick={() => navigate("/tickets/create")} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
-            ➕ Report Incident
-          </button>
 
-          {/* ✅ Facilities */}
-          <button
-            onClick={() => navigate("/facilities")}
+          <button onClick={() => navigate("/facilities")}
             style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
             🏛️ Facilities
           </button>
 
-          {/* Notifications */}
-          <button
-            onClick={() => navigate("/notifications")}
+          {/* ✅ My Bookings */}
+          <button onClick={() => navigate("/bookings")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
+            📅 My Bookings
+          </button>
+
+          <button onClick={() => navigate("/tickets/my")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
+            🎫 My Tickets
+          </button>
+
+          <button onClick={() => navigate("/tickets/create")}
+            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
+            ➕ Report Incident
+          </button>
+
+          <button onClick={() => navigate("/notifications")}
             style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", fontSize: "14px", fontWeight: "500", color: "#64748B", background: "transparent", border: "none", width: "100%", textAlign: "left" }}>
             🔔 Notifications
             {unreadCount > 0 && (
@@ -100,7 +103,6 @@ export default function UserDashboard() {
         {/* Content */}
         <div style={{ padding: "32px" }}>
 
-          {/* Page Header */}
           <div style={{ marginBottom: "28px" }}>
             <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#1E293B", margin: 0 }}>
               Welcome back, {user?.name} 👋
@@ -113,7 +115,6 @@ export default function UserDashboard() {
           {/* Stat Cards */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginBottom: "28px" }}>
 
-            {/* Unread Notifications */}
             <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px" }}>
               <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#FEE2E2", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>🔔</div>
               <div>
@@ -122,7 +123,6 @@ export default function UserDashboard() {
               </div>
             </div>
 
-            {/* Total Notifications */}
             <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px" }}>
               <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#D1FAE5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>✅</div>
               <div>
@@ -131,7 +131,6 @@ export default function UserDashboard() {
               </div>
             </div>
 
-            {/* My Role */}
             <div style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px" }}>
               <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#DBEAFE", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>👤</div>
               <div>
@@ -144,8 +143,8 @@ export default function UserDashboard() {
 
           {/* Quick Links */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px", marginBottom: "28px" }}>
-            <button
-              onClick={() => navigate("/facilities")}
+
+            <button onClick={() => navigate("/facilities")}
               style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px", cursor: "pointer", textAlign: "left" }}>
               <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#EFF6FF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>🏛️</div>
               <div>
@@ -154,23 +153,23 @@ export default function UserDashboard() {
               </div>
             </button>
 
-            <button
-              onClick={() => navigate("/notifications")}
+            {/* ✅ Bookings quick link */}
+            <button onClick={() => navigate("/bookings")}
               style={{ background: "#fff", borderRadius: "16px", border: "1px solid #E2E8F0", padding: "20px 24px", display: "flex", alignItems: "center", gap: "16px", cursor: "pointer", textAlign: "left" }}>
-              <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#FEF9C3", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>🔔</div>
+              <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "#D1FAE5", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>📅</div>
               <div>
-                <div style={{ fontSize: "15px", fontWeight: "700", color: "#1E293B" }}>All Notifications</div>
-                <div style={{ fontSize: "13px", color: "#64748B" }}>View and manage your alerts</div>
+                <div style={{ fontSize: "15px", fontWeight: "700", color: "#1E293B" }}>My Bookings</div>
+                <div style={{ fontSize: "13px", color: "#64748B" }}>View and manage your bookings</div>
               </div>
             </button>
+
           </div>
 
           {/* Recent Notifications */}
           <div style={{ background: "#fff", borderRadius: "20px", border: "1px solid #E2E8F0", overflow: "hidden" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px", borderBottom: "1px solid #E2E8F0" }}>
               <span style={{ fontSize: "16px", fontWeight: "700", color: "#1E293B" }}>Recent Notifications</span>
-              <button
-                onClick={() => navigate("/notifications")}
+              <button onClick={() => navigate("/notifications")}
                 style={{ background: "none", border: "none", color: "#1D4ED8", fontSize: "13px", fontWeight: "600", cursor: "pointer" }}>
                 View all →
               </button>

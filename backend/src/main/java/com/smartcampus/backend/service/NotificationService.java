@@ -27,6 +27,13 @@ public class NotificationService {
                 .build();
         return notificationRepository.save(notification);
     }
+    // Add this method to NotificationService.java
+    public Notification createNotification(Long userId,
+                                           String message,
+                                           NotificationType type) {
+        User user = userService.getUserById(userId);
+        return createNotification(user, type, message);
+    }
 
     // Get all notifications for current user
     public List<Notification> getUserNotifications(String email) {
@@ -85,4 +92,5 @@ public class NotificationService {
 
         notificationRepository.delete(notification);
     }
+
 }
