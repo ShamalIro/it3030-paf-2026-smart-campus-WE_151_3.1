@@ -5,6 +5,15 @@ const NotificationDropdown = ({ onClose, onRefresh, onViewAll }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const formatDate = (value) => {
+    if (!value) return "";
+    return new Date(value).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
   useEffect(() => {
     fetchNotifications();
   }, []);
@@ -64,7 +73,7 @@ const NotificationDropdown = ({ onClose, onRefresh, onViewAll }) => {
               {n.message}
             </div>
             <div style={{ fontSize: "11px", color: "#888", marginTop: "4px" }}>
-              {new Date(n.createdAt).toLocaleString()}
+              {formatDate(n.createdAt)}
             </div>
           </div>
         ))

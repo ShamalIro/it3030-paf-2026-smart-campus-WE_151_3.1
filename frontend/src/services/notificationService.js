@@ -3,16 +3,21 @@ import axiosInstance from '../api/axiosInstance';
 const notificationService = {
 
     // Get all notifications
+    getMyNotifications: async () => {
+        const response = await axiosInstance.get('/notifications');
+        return response;
+    },
+
     getAll: async () => {
         const response = await axiosInstance.get('/notifications');
         return response.data;
     },
 
     // Get unread notifications
-    getUnread: async () => {
+    getUnreadNotifications: async () => {
         const response = await axiosInstance.get(
             '/notifications/unread');
-        return response.data;
+        return response;
     },
 
     // Get unread count
@@ -35,7 +40,7 @@ const notificationService = {
     },
 
     // Delete notification
-    delete: async (id) => {
+    deleteNotification: async (id) => {
         await axiosInstance.delete(`/notifications/${id}`);
     },
 };

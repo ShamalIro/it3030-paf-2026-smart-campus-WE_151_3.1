@@ -440,6 +440,12 @@ export default function AdminDashboard() {
           {/* Notifications */}
           <button
             style={s.navItem(false)}
+            onClick={() => navigate("/admin/tickets")}
+          >
+            🎫 <span>Manage Tickets</span>
+          </button>
+          <button
+            style={s.navItem(false)}
             onClick={() => navigate("/notifications")}
           >
             🔔 <span>Notifications</span>

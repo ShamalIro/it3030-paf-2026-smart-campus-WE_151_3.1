@@ -1,6 +1,7 @@
 import { useAuth } from "../../context/AuthContext";
 import AdminDashboard from "../admin/AdminDashboard";
 import UserDashboard from "./UserDashboard";
+import TechnicianDashboard from "../tickets/TechnicianDashboard";
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -19,6 +20,10 @@ export default function DashboardPage() {
 
   if (user?.role === "ADMIN") {
     return <AdminDashboard />;
+  }
+
+  if (user?.role === "TECHNICIAN") {
+    return <TechnicianDashboard />;
   }
 
   return <UserDashboard />;

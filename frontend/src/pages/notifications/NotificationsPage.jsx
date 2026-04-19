@@ -8,6 +8,15 @@ const NotificationsPage = () => {
   const [loading, setLoading] = useState(true);
   const { user, logout } = useAuth();
 
+  const formatDate = (value) => {
+    if (!value) return "";
+    return new Date(value).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
   useEffect(() => {
     fetchNotifications();
   }, []);
@@ -113,7 +122,7 @@ const NotificationsPage = () => {
                 )}
               </div>
               <div style={{ fontSize: "12px", color: "#888", marginTop: "6px" }}>
-                {n.type} • {new Date(n.createdAt).toLocaleString()}
+                {n.type} • {formatDate(n.createdAt)}
               </div>
             </div>
           ))
